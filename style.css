@@ -1,0 +1,28 @@
+#board {
+}
+
+.controls {
+  text-align: center;
+  width: auto;
+  margin-top: 100px;
+  margin-right: 100px;
+  float: right;
+}
+
+.row {
+  display: flex;
+}
+
+.square {
+  font-size: 25px;
+  text-align: center;
+  padding: 5px;
+  padding-top: 10px;
+  width: 35px;
+  height: 35px;
+  background-color: #ccc;
+  border: 1px solid black;
+}
+.revealed {
+  background-color: #efefef;
+}
