@@ -1,15 +1,15 @@
-let board = document.getElementById('board'),
-    reset = document.getElementById('reset');
-
-reset.addEventListener('click', ()=> {
-  location.reload();
-});
+let difficulty = document.getElementById('difficulty'),
+    board = document.getElementById('board'),
+    timer = document.getElementById('timer');
 
 let cells = []; //Matrix of cells
 
-let m = 10, //rows
-    n = 10, //columns
+let m = 0, //rows
+    n = 0,
+    bombs = 0, //columns
     counter = 0;
+let timing;
+
 
 let generateBoard = ()=> {
 
@@ -54,7 +54,7 @@ let generateBombs = ()=> {
     }
   }
 
-  for(let i = 0; i < 15; i++) {
+  for(let i = 0; i < bombs; i++) {
     let cell = arr[Math.floor(Math.random() * arr.length)];
     cell.val = -1;
     arr.splice(arr.indexOf(cell), 1);
@@ -89,7 +89,7 @@ let generateValues = ()=> {
 let reveal = (cell)=> {
 
   if(cell.val === -1) {
-    gameOver();
+    gameOver(cell);
   } else if(cell.val > 0) {
     cell.square.innerHTML = cell.val;
     cell.revealed = true;
@@ -120,25 +120,65 @@ let reveal = (cell)=> {
 
 }
 
-let gameOver = ()=> {
-  document.getElementsByClassName('info')[0].innerHTML = '<h3>Oops!! Game Over</h3>';
-  reset.hidden = false;
+let gameOver = (cell)=> {
 
   console.log("game over");
+
   for(let i = 0; i < m; i++) {
     for(let j = 0; j < n; j++) {
 
       if(cells[i][j].val === -1) {
-        cells[i][j].square.innerHTML = 'X';
-      } else {
-        cells[i][j].square.innerHTML = cells[i][j].val;
+  		cells[i][j].square.innerHTML = '<img src="bomb.png">';
+      	cells[i][j].square.className += ' revealed';
       }
-
-      cells[i][j].square.className += ' revealed';
     }
   }
+  cell.square.innerHTML = '<img src="explosion.png">';
+
+  reveal = ()=> {};
+  clearInterval(timing);
 }
 
-generateBoard();
-generateBombs();
-generateValues();
+let start = (level)=> {
+  if(level === 1) {
+    m = n = 9;
+    bombs = 10;
+  }
+  if(level === 2) {
+    m = n = 16;
+    bombs = 40;
+  }
+  if(level === 3) {
+    m = 16;
+    n = 30;
+    bombs = 99;
+  }
+
+  difficulty.hidden = true;
+  generateBoard();
+  generateBombs();
+  generateValues();
+
+  let sec = 0;
+  let min = 0;
+  timing = setInterval(()=> {
+  	if(sec === 60) {
+  		sec = 0;
+  		min++;
+  	}
+
+  	if(sec < 10 && min < 10) {
+  		timer.innerHTML = `0${min}:0${sec}`;  		
+  	} else if(sec >=10 && min < 10) {
+  		timer.innerHTML = `0${min}:${sec}`;
+  	} else if(sec < 10 && min >= 10) {
+  		timer.innerHTML = `${min}:0${sec}`;
+  	} else {
+  		timer.innerHTML = `${min}:${sec}`;
+  	}
+  	
+  	sec++;
+  }, 1000);
+
+
+}

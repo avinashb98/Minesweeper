@@ -8,17 +8,21 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <div id="board">
-      <div class="controls">
-        <h2>Minesweeper</h2><br>
-        <div class="info">
-          <h3>There are 15 bombs in there.</h3>
-        </div>
+    <div class="heading big-font">Minesweeper</h1>
 
-        <button id="reset" type="button" name="button" hidden>Reset</button>
-      </div>
-
+    <div id="difficulty">
+      <div class="heading small-font">Choose difficulty Level</div>
+      <button class="btn" onclick="start(1)">Easy</button>
+      <button class="btn" onclick="start(2)">Medium</button>
+      <button class="btn" onclick="start(3)">Hard</button>
     </div>
+
+    <div class="wrapper">
+      <div id="board"></div>
+    </div>
+    <div id="timer">
+    </div>
+
     <script src="index.js" charset="utf-8"></script>
   </body>
 </html>
