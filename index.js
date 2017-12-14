@@ -2,7 +2,7 @@ let difficulty = document.getElementById('difficulty'),
     board = document.getElementById('board'),
     timer = document.getElementById('timer');
 
-let cells = []; //Matrix of cells
+let cells = []; //Matrix of cells to keep track
 
 let m = 0, //rows
     n = 0,
@@ -83,7 +83,6 @@ let generateValues = ()=> {
 
     }
   }
-
 }
 
 let reveal = (cell)=> {
@@ -95,6 +94,7 @@ let reveal = (cell)=> {
     cell.revealed = true;
     cell.square.className += ' revealed';
     counter++;
+
   } else {
 
     for(let xoff = -1; xoff <= 1; xoff++) {
