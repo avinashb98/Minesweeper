@@ -14,11 +14,12 @@ let timing;
 let generateBoard = ()=> {
 
   for(let i = 0; i < m; i++) {
-    cells.push([]);
+    
+    cells.push([]); //Empty container array
 
     let row = document.createElement('div');
     row.className = 'row';
-
+    
     board.appendChild(row);
 
     for(let j = 0; j < n; j++) {
@@ -29,18 +30,20 @@ let generateBoard = ()=> {
       row.appendChild(square);
 
       let cell = {
-        square: square,
-        x: i,
-        y: j,
-        val: 0,
-        revealed: false
+        square: square, //store HTML element
+        x: i,           //row position in the board
+        y: j,           //column position in the board
+        val: 0,         //number of bombs in the neightbouring cells
+        revealed: false //status of the cell
       }
 
       cells[i].push(cell);
 
+      //reveal cell on click
       square.addEventListener('click', ()=> {
         reveal(cell);
       });
+
     }
   }
 }
@@ -48,6 +51,7 @@ let generateBoard = ()=> {
 let generateBombs = ()=> {
   let arr = [];
 
+  //linear array to store all the cells
   for(let i = 0; i < m; i++) {
     for(let j = 0; j < n; j++) {
       arr.push(cells[i][j]);
@@ -55,8 +59,14 @@ let generateBombs = ()=> {
   }
 
   for(let i = 0; i < bombs; i++) {
+    //randomly select cell from arr and place bomb
     let cell = arr[Math.floor(Math.random() * arr.length)];
     cell.val = -1;
+
+    /*
+      remove cell from the array when the bomb is placed
+      to prevent repititive placement
+    */
     arr.splice(arr.indexOf(cell), 1);
   }
 
@@ -91,18 +101,30 @@ let reveal = (cell)=> {
     gameOver(cell);
   } else if(cell.val > 0) {
     cell.square.innerHTML = cell.val;
+  
+    //Color-Code cell values
+    if(cell.val === 2) {
+      cell.square.className += ' green';
+    }
+    else if(cell.val > 2) {
+      cell.square.className += ' red';
+    }
+
     cell.revealed = true;
     cell.square.className += ' revealed';
     counter++;
 
   } else {
 
+    //Index Offsets
     for(let xoff = -1; xoff <= 1; xoff++) {
       for(let yoff = -1; yoff <= 1; yoff++) {
-
+        
+        //Border Checks
         if(cell.x+xoff >= 0 && cell.x+xoff < m
-          && cell.y+yoff >= 0 && cell.y+yoff < n ){
-
+          && cell.y+yoff >= 0 && cell.y+yoff < n ){ 
+            
+            //neighbour cell isn't bomb and not yet revealed
             if(cells[cell.x + xoff][cell.y + yoff].val !== -1
               && !cells[cell.x + xoff][cell.y + yoff].revealed) {
 

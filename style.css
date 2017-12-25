@@ -4,7 +4,6 @@ body {
 
 .heading {
   font-family: 'Roboto', sans-serif;
-  margin-top: 2vh;
   margin-bottom: 2vh;
   color: #444;
 }
@@ -69,4 +68,12 @@ img {
   padding: 8px;
   display: inline-block;
   text-decoration: none;
+}
+
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
 }
