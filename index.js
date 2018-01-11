@@ -10,16 +10,20 @@ let m = 0, //rows
     counter = 0;
 let timing;
 
+//Unicode Characters
+let bombCharacter = "<span>&#128163;</span>",
+    explosionCharacter = "<span>&#128293;</span>";
+
 
 let generateBoard = ()=> {
 
   for(let i = 0; i < m; i++) {
-    
+
     cells.push([]); //Empty container array
 
     let row = document.createElement('div');
     row.className = 'row';
-    
+
     board.appendChild(row);
 
     for(let j = 0; j < n; j++) {
@@ -101,7 +105,7 @@ let reveal = (cell)=> {
     gameOver(cell);
   } else if(cell.val > 0) {
     cell.square.innerHTML = cell.val;
-  
+
     //Color-Code cell values
     if(cell.val === 2) {
       cell.square.className += ' green';
@@ -119,11 +123,11 @@ let reveal = (cell)=> {
     //Index Offsets
     for(let xoff = -1; xoff <= 1; xoff++) {
       for(let yoff = -1; yoff <= 1; yoff++) {
-        
+
         //Border Checks
         if(cell.x+xoff >= 0 && cell.x+xoff < m
-          && cell.y+yoff >= 0 && cell.y+yoff < n ){ 
-            
+          && cell.y+yoff >= 0 && cell.y+yoff < n ){
+
             //neighbour cell isn't bomb and not yet revealed
             if(cells[cell.x + xoff][cell.y + yoff].val !== -1
               && !cells[cell.x + xoff][cell.y + yoff].revealed) {
@@ -143,21 +147,21 @@ let reveal = (cell)=> {
 }
 
 let gameOver = (cell)=> {
-
-  console.log("game over");
+  // 
+  // console.log("game over");
+  console.log(cell);
 
   for(let i = 0; i < m; i++) {
     for(let j = 0; j < n; j++) {
 
       if(cells[i][j].val === -1) {
-  		cells[i][j].square.innerHTML = '<img src="bomb.png">';
+  		  cells[i][j].square.innerHTML = bombCharacter;
       	cells[i][j].square.className += ' revealed';
       }
     }
   }
-  cell.square.innerHTML = '<img src="explosion.png">';
-
-  reveal = ()=> {};
+  cell.square.innerHTML = explosionCharacter;
+  console.log(cell.square);
   clearInterval(timing);
 }
 
@@ -190,7 +194,7 @@ let start = (level)=> {
   	}
 
   	if(sec < 10 && min < 10) {
-  		timer.innerHTML = `0${min}:0${sec}`;  		
+  		timer.innerHTML = `0${min}:0${sec}`;
   	} else if(sec >=10 && min < 10) {
   		timer.innerHTML = `0${min}:${sec}`;
   	} else if(sec < 10 && min >= 10) {
@@ -198,7 +202,7 @@ let start = (level)=> {
   	} else {
   		timer.innerHTML = `${min}:${sec}`;
   	}
-  	
+
   	sec++;
   }, 1000);
 
