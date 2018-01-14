@@ -2,7 +2,6 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-
     <title>
       Minesweeper
     </title>
@@ -10,20 +9,20 @@
   </head>
   <body>
     <div class="heading big-font">Minesweeper</h1>
-
     <div id="difficulty">
       <div class="heading small-font">Choose difficulty Level</div>
       <button class="btn" onclick="start(1)">Easy</button>
       <button class="btn" onclick="start(2)">Medium</button>
       <button class="btn" onclick="start(3)">Hard</button>
     </div>
-
-    <div class="wrapper">
-      <div id="board"></div>
+    <div class="game">
+      <div class="wrapper">
+        <div id="board"></div>
+      </div>
+      <div id="timer"></div>
+      <div hidden id="end" class="heading big-font"></div>
+      <button id="reset" class="btn" hidden onclick="location.reload()">Reset</button>
     </div>
-    <div id="timer">
-    </div>
-
     <script src="index.js" charset="utf-8"></script>
   </body>
 </html>

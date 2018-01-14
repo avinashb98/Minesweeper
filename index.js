@@ -1,13 +1,15 @@
 let difficulty = document.getElementById('difficulty'),
     board = document.getElementById('board'),
-    timer = document.getElementById('timer');
+    timer = document.getElementById('timer'),
+    reset = document.getElementById('reset'),
+    end   = document.getElementById('end');
 
 let cells = []; //Matrix of cells to keep track
 
 let m = 0, //rows
     n = 0,
     bombs = 0, //columns
-    counter = 0;
+    revealedCells = 0;
 let timing;
 
 //Unicode Characters
@@ -101,55 +103,61 @@ let generateValues = ()=> {
 
 let reveal = (cell)=> {
 
-  if(cell.val === -1) {
-    gameOver(cell);
-  } else if(cell.val > 0) {
-    cell.square.innerHTML = cell.val;
+  if(!cell.revealed) {
 
-    //Color-Code cell values
-    if(cell.val === 2) {
-      cell.square.className += ' green';
-    }
-    else if(cell.val > 2) {
-      cell.square.className += ' red';
-    }
+    if(cell.val === -1) {
 
-    cell.revealed = true;
-    cell.square.className += ' revealed';
-    counter++;
-
-  } else {
-
-    //Index Offsets
-    for(let xoff = -1; xoff <= 1; xoff++) {
-      for(let yoff = -1; yoff <= 1; yoff++) {
-
-        //Border Checks
-        if(cell.x+xoff >= 0 && cell.x+xoff < m
-          && cell.y+yoff >= 0 && cell.y+yoff < n ){
-
-            //neighbour cell isn't bomb and not yet revealed
-            if(cells[cell.x + xoff][cell.y + yoff].val !== -1
-              && !cells[cell.x + xoff][cell.y + yoff].revealed) {
-
-                cell.revealed = true;
-                cell.square.className += ' revealed';
-                reveal(cells[cell.x + xoff][cell.y + yoff]);
-              }
-
+      gameOver(cell);
+      return;
+    
+    } else if(cell.val > 0) {
+      
+      cell.square.innerHTML = cell.val;
+  
+      //Color-Code cell values
+      if(cell.val === 2) {
+        cell.square.className += ' green';
+      }
+      else if(cell.val > 2) {
+        cell.square.className += ' red';
+      }
+  
+      cell.revealed = true;
+      cell.square.className += ' revealed';
+  
+    } else {
+  
+      //Index Offsets
+      for(let xoff = -1; xoff <= 1; xoff++) {
+        for(let yoff = -1; yoff <= 1; yoff++) {
+  
+          //Border Checks
+          if(cell.x+xoff >= 0 && cell.x+xoff < m
+            && cell.y+yoff >= 0 && cell.y+yoff < n ){
+  
+              //neighbour cell isn't bomb and not yet revealed
+              if(cells[cell.x + xoff][cell.y + yoff].val !== -1
+                && !cells[cell.x + xoff][cell.y + yoff].revealed) {
+  
+                  cell.revealed = true;
+                  cell.square.className += ' revealed';
+                  reveal(cells[cell.x + xoff][cell.y + yoff]);
+                }
+  
+          }
+  
         }
-
       }
     }
-    counter++;
+  
+    revealedCells++;
+    if(revealedCells === (m * n) - bombs) {
+      gameWon();
+    }
   }
-
 }
 
 let gameOver = (cell)=> {
-  // 
-  // console.log("game over");
-  console.log(cell);
 
   for(let i = 0; i < m; i++) {
     for(let j = 0; j < n; j++) {
@@ -161,14 +169,17 @@ let gameOver = (cell)=> {
     }
   }
   cell.square.innerHTML = explosionCharacter;
-  console.log(cell.square);
   clearInterval(timing);
+  end.hidden = false;
+  end.textContent = "You are blown away!!";
+  reset.hidden = false;
 }
+
 
 let start = (level)=> {
   if(level === 1) {
     m = n = 9;
-    bombs = 10;
+    bombs = 1;
   }
   if(level === 2) {
     m = n = 16;
@@ -179,6 +190,8 @@ let start = (level)=> {
     n = 30;
     bombs = 99;
   }
+
+  safeCells = m * n - bombs;
 
   difficulty.hidden = true;
   generateBoard();
@@ -205,6 +218,13 @@ let start = (level)=> {
 
   	sec++;
   }, 1000);
-
-
 }
+
+let gameWon = ()=> {
+  clearInterval(timing);
+  end.hidden = false;
+  end.textContent = "You Win!!";
+  reset.hidden = false;
+}
+
+
