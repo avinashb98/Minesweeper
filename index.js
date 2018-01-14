@@ -179,7 +179,7 @@ let gameOver = (cell)=> {
 let start = (level)=> {
   if(level === 1) {
     m = n = 9;
-    bombs = 1;
+    bombs = 10;
   }
   if(level === 2) {
     m = n = 16;
